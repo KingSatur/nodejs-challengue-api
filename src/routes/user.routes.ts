@@ -1,9 +1,14 @@
 import { Router } from 'express';
-import { createUserHandler, updateUserHandler } from '../controller/user.controller';
+import { updateUserHandler } from '../controller/user.controller';
+import { AuthenticationMiddleware } from '../middleware/auth.middleware';
+import { PermissionMiddleware } from '../middleware/permission.middleware';
 
 const userRouter: Router = Router();
 
-userRouter.post('/', createUserHandler);
-userRouter.put('/:id', updateUserHandler);
+userRouter.put(
+  '/:id',
+  [AuthenticationMiddleware.jwt, PermissionMiddleware.onlySameUserCanPerformOperation],
+  updateUserHandler
+);
 
 export default userRouter;

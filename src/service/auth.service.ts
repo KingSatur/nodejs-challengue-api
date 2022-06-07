@@ -43,4 +43,5 @@ async function loginUser(loginDto: LoginDto): Promise<TokenDto> {
 
 export default {
   registerUser,
+  loginUser,
 };

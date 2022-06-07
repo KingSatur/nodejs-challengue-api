@@ -1,18 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
 import * as JWT from 'jsonwebtoken';
 import config from '../config';
+import { ApiResponse } from '../dto/api-response.dto';
 
-export class AuthenticationHelper {
+export class AuthenticationMiddleware {
   public static jwt(request: Request, response: Response, next: NextFunction): void {
     const token: string = String(request.headers['access-token']);
-
     if (token) {
       JWT.verify(token, config.jwt_seed, (error: any, decoded: any) => {
         if (error) {
           response.status(403);
-          return response.json({
-            message: 'Invalid token',
-          });
+          const apiResponse: ApiResponse<any> = {
+            success: false,
+            transactionData: {
+              message: 'Unauthorized',
+              status: 403,
+            },
+          };
+          response.json(apiResponse);
         } else {
           request.body.decoded = decoded;
           next();
@@ -20,9 +25,14 @@ export class AuthenticationHelper {
       });
     } else {
       response.status(403);
-      response.send({
-        message: 'Missing Token',
-      });
+      const apiResponse: ApiResponse<any> = {
+        success: false,
+        transactionData: {
+          message: 'Unauthorized',
+          status: 403,
+        },
+      };
+      response.json(apiResponse);
     }
   }
 }
