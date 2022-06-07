@@ -1,7 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
+import productRouter from './product.routes';
+import userRouter from './user.routes';
 
 const router: Router = Router();
-const prismaClient: PrismaClient = new PrismaClient();
+
+router.use('/user/', userRouter);
+router.use('/product/', productRouter);
 
 export default router;
