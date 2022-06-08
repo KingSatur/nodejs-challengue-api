@@ -22,7 +22,8 @@
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
     "swagger-jsdoc": "^6.1.0",
-    "swagger-ui-express": "^4.3.0"
+    "swagger-ui-express": "^4.3.0",
+    "express-validator": "^6.6.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
