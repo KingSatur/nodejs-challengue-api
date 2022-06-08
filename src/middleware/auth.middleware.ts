@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import * as JWT from 'jsonwebtoken';
-import config from '../config';
 import { ApiResponse } from '../dto/api-response.dto';
-
+import properties from '../config/properties';
 export class AuthenticationMiddleware {
   public static jwt(request: Request, response: Response, next: NextFunction): void {
     const token: string = String(request.headers['access-token']);
     if (token) {
-      JWT.verify(token, config.jwt_seed, (error: any, decoded: any) => {
+      JWT.verify(token, properties.jwt_seed, (error: any, decoded: any) => {
         if (error) {
           response.status(403);
           const apiResponse: ApiResponse<any> = {

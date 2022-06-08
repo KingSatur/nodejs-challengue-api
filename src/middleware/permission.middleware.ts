@@ -21,4 +21,6 @@ export class PermissionMiddleware {
       response.json(apiResponse);
     }
   }
+
+  public static onlyAdminCanPerformOperation(request: Request, response: Response) {}
 }

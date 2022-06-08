@@ -1,9 +1,9 @@
-import { hashSync, compareSync } from 'bcryptjs';
+import { hashSync, compareSync, compare } from 'bcryptjs';
 import { User, PrismaClient } from '@prisma/client';
 import { RegisterUserDto } from '../dto/auth/register-user.dto';
 import { TokenDto } from '../dto/auth/token.dto';
-import jwtService from './jwt.service';
 import { LoginDto } from '../dto/auth/login.dto';
+import signToken from './jwt.service';
 
 const prismaClient: PrismaClient = new PrismaClient();
 
@@ -18,7 +18,7 @@ async function registerUser(registerUserDto: RegisterUserDto): Promise<TokenDto>
       role: registerUserDto.role,
     },
   });
-  const token = jwtService.signToken(user);
+  const token = signToken(user);
   return {
     token,
   };
@@ -31,8 +31,9 @@ async function loginUser(loginDto: LoginDto): Promise<TokenDto> {
   if (!user) {
     throw new Error();
   }
-  if (compareSync(user?.password, loginDto.password)) {
-    const token = jwtService.signToken(user);
+  console.log(user.password, loginDto.password);
+  if (compareSync(loginDto.password, user?.password)) {
+    const token = signToken(user);
     return {
       token,
     };

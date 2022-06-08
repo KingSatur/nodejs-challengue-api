@@ -1,17 +1,13 @@
 import { User } from '@prisma/client';
 import * as JWT from 'jsonwebtoken';
-import config from '../config';
+import properties from '../config/properties';
 
-function signToken(user: User) {
+export default function signToken(user: User) {
   return JWT.sign(
     {
       id: user.id,
       role: user.role,
     },
-    config.jwt_seed
+    properties.jwt_seed
   );
 }
-
-export default {
-  signToken,
-};
