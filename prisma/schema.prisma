@@ -17,9 +17,11 @@ model User{
   last_name String @db.VarChar(20)
   password String @db.VarChar(100)
   profile_photo String? @db.Bit(100)
+  residence String? @db.VarChar(30)
   role user_role
   createdAt DateTime @default(now())
   updated_at    DateTime?       @updatedAt
+  purchases CustomerPurchase[]
 }
 
 model Product{
@@ -28,11 +30,30 @@ model Product{
   price Decimal @db.Decimal(9,2)
   code String @unique
   updated_at  DateTime? @updatedAt
-  inventories Inventory[]
+  quantity Int @default(0)
   createdAt DateTime @default(now())
   book_id Int? 
   book Book? @relation(fields: [book_id], references: [id])
-     
+  purchases Purchase[]
+  customerPurchases CustomerPurchase[]
+}
+
+model Purchase{
+  id Int @id @default(autoincrement())
+  cost Decimal @db.Money
+  product_id Int
+  quantity Int
+  product Product @relation(fields: [product_id], references: [id])
+}
+
+model CustomerPurchase{
+  id Int @id @default(autoincrement())
+  total Decimal @db.Money
+  quantity Int
+  product_id Int
+  product Product @relation(fields: [product_id], references: [id])
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model Book{
@@ -44,15 +65,6 @@ model Book{
   updated_at  DateTime? @updatedAt
   createdAt DateTime @default(now())
   product Product?
-}
-
-model Inventory {
-  id Int @id @default(autoincrement())
-  provider_name String?
-  product_id Int
-  quantity Int
-  product  Product @relation(fields: [product_id], references: [id])
-  @@index([product_id], name: "inventory_product_id_foreign")
 }
 
 enum user_role {

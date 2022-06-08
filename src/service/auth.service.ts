@@ -1,11 +1,10 @@
-import { hashSync, compareSync, compare } from 'bcryptjs';
-import { User, PrismaClient } from '@prisma/client';
+import { hashSync, compareSync } from 'bcryptjs';
+import { User } from '@prisma/client';
 import { RegisterUserDto } from '../dto/auth/register-user.dto';
 import { TokenDto } from '../dto/auth/token.dto';
 import { LoginDto } from '../dto/auth/login.dto';
 import signToken from './jwt.service';
-
-const prismaClient: PrismaClient = new PrismaClient();
+import { prismaClient } from '../config/database-client';
 
 async function registerUser(registerUserDto: RegisterUserDto): Promise<TokenDto> {
   registerUserDto.password = hashSync(registerUserDto.password);
