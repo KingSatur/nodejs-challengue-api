@@ -1,6 +1,6 @@
 export interface PurchaseCreatedDto {
   price: number;
-  quantity: number;
+  purchasedQuantity: number;
   productId: number;
   id: number;
 }

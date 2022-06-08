@@ -16,8 +16,8 @@ const validateRegisterUser = [
 ];
 
 const validateLoginUser = [
-  body('email', 'Correo invalido').isEmail().exists(),
-  body('password', 'Password invalido').isString().isLength({ min: 8 }),
+  body('email', 'Correo invalido').exists(),
+  body('password', 'Password invalido').exists(),
   ValidationError,
 ];
 
@@ -27,8 +27,8 @@ const validateEditUser = [
 ];
 
 const validateAddProductToInventary = [
-  body('email', 'Correo invalido').isEmail().exists(),
-  body('password', 'Password invalido').isString().isLength({ min: 8 }),
+  body('email', 'Correo invalido').exists(),
+  body('password', 'Password invalido').exists(),
   ValidationError,
 ];
 

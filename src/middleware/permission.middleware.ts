@@ -30,7 +30,8 @@ export class PermissionMiddleware {
   ) {
     if (request.body?.decoded?.role === 'ADMIN') {
       next();
+    } else {
+      return response.status(apiResponse.transactionData.status).json(apiResponse);
     }
-    return response.status(apiResponse.transactionData.status).json(apiResponse);
   }
 }

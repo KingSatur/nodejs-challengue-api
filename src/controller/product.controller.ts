@@ -60,7 +60,11 @@ export async function listProductsHandler(
   next: NextFunction
 ) {
   try {
-    const responseDto: ProductDto[] = await ProductService.listProducts(0, 0);
+    const { page, limit } = req.query;
+    const responseDto: ProductDto[] = await ProductService.listProducts(
+      Number(page),
+      Number(limit)
+    );
     const response: ApiResponse<ProductDto[]> = {
       data: responseDto,
       success: true,

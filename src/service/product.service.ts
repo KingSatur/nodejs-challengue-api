@@ -3,7 +3,7 @@ import { prismaClient } from '../config/database-client';
 import { UpdateQuantityDto } from '../dto/product/update-quantity.dto';
 import { PurchaseDto } from '../dto/product/purchase.dto';
 import { UpdateQuantityProductDto } from '../dto/product/update-quantity-out.dto';
-import { Book, CustomerPurchase, Product, Purchase } from '@prisma/client';
+import { Book, Product, Purchase } from '@prisma/client';
 import { PurchaseCreatedDto } from '../dto/product/purchase-out.dto';
 import { PurchaseByCustomerInputDto } from '../dto/product/purchase-customer.dto';
 import { ApplicationError } from '../dto/error.dto';
@@ -36,6 +36,7 @@ async function addProductToInventory(productDto: ProductDto): Promise<ProductDto
     });
   }
   return {
+    id: product.id,
     code: product.code,
     name: product.name,
     quantity: product.quantity,
@@ -72,9 +73,14 @@ async function udpateProductQuantity(
 }
 
 async function listProducts(page: number, limit: number): Promise<ProductDto[]> {
-  const products: Product[] = await prismaClient.product.findMany();
+  const skip = (page - 1) * limit;
+  const products: Product[] = await prismaClient.product.findMany({
+    skip,
+    take: limit,
+  });
 
   const productsDto: ProductDto[] = products?.map((productEntity) => ({
+    id: productEntity.id,
     code: productEntity.code,
     name: productEntity.name,
     quantity: productEntity.quantity,
@@ -169,7 +175,7 @@ async function purchaseQuantity(purchaseDto: PurchaseDto): Promise<PurchaseCreat
     id: purchase.id,
     price: Number(purchase.cost),
     productId: purchase.product_id,
-    quantity: purchase.quantity,
+    purchasedQuantity: purchaseDto.quantity,
   };
 }
 
